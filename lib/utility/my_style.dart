@@ -30,82 +30,99 @@ class MyStyle {
   MyStyle();
 }
 
-
 class MyStatefulWidget extends StatefulWidget {
   const MyStatefulWidget({Key? key}) : super(key: key);
 
   @override
   State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
 }
+
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   String dropdownValue = 'คำนำหน้า';
   late double screen;
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<String>(
-      value: dropdownValue,
-      icon: const Icon(Icons.arrow_downward),
-      iconSize: 24,
-      elevation: 16,
-      style: const TextStyle(color: Colors.black),
-      
-      underline: Container(
-        height: 2,
-        color: Colors.black,
+    screen = MediaQuery.of(context).size.width;
+    print('screen = $screen');
+    return Container(
+      margin: EdgeInsets.only(top: 30),
+      width: screen * 0.75,
+      decoration: BoxDecoration(
+        border: Border.all(color: MyStyle().color2),
+        borderRadius: BorderRadius.circular(20),
       ),
-      onChanged: (String? newValue) {
-        setState(() {
-          dropdownValue = newValue!;
-        });
-      },
-      items: <String>['คำนำหน้า', 'นาย', 'นางสาว', 'นาง']
-          .map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
+      child: DropdownButton<String>(
+        icon: const Icon(Icons.arrow_downward_rounded),
+        isExpanded: true,
+        value: dropdownValue,
+        iconSize: 24,
+        elevation: 16,
+        style: TextStyle(color: MyStyle().color2, fontSize: 18.0),
+        onChanged: (String? newValue) {
+          setState(() {
+            dropdownValue = newValue!;
+          });
+        },
+        items: <String>['คำนำหน้า', 'นาย', 'นางสาว', 'นาง']
+            .map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Center(
+              child: Container(
+                child: Text(value),
+              ),
+            ),
+          );
+        }).toList(),
+      ),
     );
   }
 }
-
 
 class Educationalqualification extends StatefulWidget {
   const Educationalqualification({Key? key}) : super(key: key);
 
   @override
-  State<Educationalqualification> createState() => _EducationalqualificationState();
+  State<Educationalqualification> createState() =>
+      _EducationalqualificationState();
 }
+
 class _EducationalqualificationState extends State<Educationalqualification> {
   String dropdownValue = 'วุฒิการศึกษาที่จบ';
   late double screen;
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<String>(
-      value: dropdownValue,
-      icon: const Icon(Icons.arrow_downward),
-      iconSize: 24,
-      elevation: 16,
-      style: const TextStyle(color: Colors.black),
-      
-      underline: Container(
-        height: 2,
-        color: Colors.black,
+    screen = MediaQuery.of(context).size.width;
+    print('screen = $screen');
+    return Container(
+      margin: EdgeInsets.only(top: 30),
+      width: screen * 0.75,
+      decoration: BoxDecoration(
+        border: Border.all(color: MyStyle().color2),
+        borderRadius: BorderRadius.circular(20),
       ),
-      onChanged: (String? newValue) {
-        setState(() {
-          dropdownValue = newValue!;
-        });
-      },
-      items: <String>['วุฒิการศึกษาที่จบ', 'ปวช', 'ปวส', 'กศน']
-          .map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
+      child: DropdownButton<String>(
+        isExpanded: true,
+        value: dropdownValue,
+        icon: const Icon(Icons.arrow_downward),
+        iconSize: 24,
+        elevation: 16,
+        style: TextStyle(color: MyStyle().color2, fontSize: 18.0),
+        onChanged: (String? newValue) {
+          setState(() {
+            dropdownValue = newValue!;
+          });
+        },
+        items: <String>['วุฒิการศึกษาที่จบ', 'ปวช', 'ปวส', 'กศน']
+            .map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Center(child: Container(child: Text(value))),
+          );
+        }).toList(),
+      ),
     );
   }
 }
