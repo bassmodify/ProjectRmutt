@@ -56,7 +56,7 @@ class _StudentRegistrationState extends State<StudentRegistration> {
     return Container(
       width: screen * 0.70,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () => Navigator.pushNamed(context, '/studentregistration1'),
         child: Text('กรอกข้อมูลขึ้นทะเบียนประวัตินักศึกษา'),
         style: ElevatedButton.styleFrom(
           primary: MyStyle().color2,
@@ -72,7 +72,7 @@ class _StudentRegistrationState extends State<StudentRegistration> {
     return Container(
       width: screen * 0.70,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: ()  => Navigator.pushNamed(context, '/uploadregistrationdocuments'),
         child: Text('อัปโหลดเอการขึ้นทะเบียนประวัตินักศึกษา'),
         style: ElevatedButton.styleFrom(
           primary: MyStyle().color2,

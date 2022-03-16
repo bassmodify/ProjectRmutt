@@ -1,45 +1,115 @@
+
+import 'package:application_project/map.dart';
 import 'package:application_project/utility/my_style.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:xml/xml.dart' as xml;
+
+class MapProvider {
+  final url = Uri.parse(
+      "http://doc.oreg.rmutt.ac.th/OREGWebService/StudentProject.asmx");
+  final _body = '''<?xml version="1.0" encoding="utf-8"?>
+                  <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+                    <soap:Body>
+                       <MRegis_Calendar xmlns="http://tempuri.org/" />
+                     </soap:Body>
+                  </soap:Envelope>''';
+
+  MapProvider() {
+    this.getCalenders();
+  }
+
+  Future<List<MapCalenders>> getCalenders() async {
+    final resp = await http.post(
+      url,
+      headers: {
+        "Content-Type": "text/xml; charset=utf-8",
+        "SOAPAction": "http://tempuri.org/MRegis_Calendar"
+      },
+      body: _body,
+    );
+    if (resp.statusCode == 200) {
+      var responseBody = resp.body;
+
+      var parseXml = xml.XmlDocument.parse(responseBody).innerText;
+
+      final decodeJson = jsonDecode(parseXml) as List;
+      List<MapCalenders> data =
+          decodeJson.map((e) => MapCalenders.fromJson(e)).toList();
+      print(data);
+      return data;
+    } else {
+      throw ("Something Error!");
+    }
+  }
+}
 
 class Schedule extends StatefulWidget {
-  const Schedule({ Key? key }) : super(key: key);
+  Schedule({Key? key}) : super(key: key);
 
   @override
-  _ScheduleState createState() => _ScheduleState();
+  State<Schedule> createState() => _ScheduleState();
 }
 
 class _ScheduleState extends State<Schedule> {
-  late double screen;
+  final mapProvider = MapProvider();
 
+  Future<List<MapCalenders>>? mapa;
+
+  @override
+  void initState() {
+    super.initState();
+    mapa = mapProvider.getCalenders();
+  }
 
   @override
   Widget build(BuildContext context) {
-    screen = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyStyle().color2,
         title: Text('กำหนดการ'),
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              newLogo7(),
-              MyStyle().titleH1('กำหนดการสำคัญต่างๆ'),
-              MyStyle().titleH1('ของทางมหาลัย'),
-            ],
-          ),
+      body: Container(
+        child: FutureBuilder(
+          future: mapa,
+          builder: (BuildContext context,
+              AsyncSnapshot<List<MapCalenders>> snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                child: Container(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            } else {
+              final data = snapshot.data;
+              return ListView.builder(
+                itemCount: data?.length,
+                itemBuilder: (context, index) {
+                  return Center(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text('${data?[index].topic}'),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Text('วันเริ่มต้น ${data?[index].startdate}'),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Text('วันสิ้นสุด ${data?[index].stopdate}'),
+                      ],
+                    ),
+                  );
+                },
+              );
+            }
+          },
         ),
       ),
-    );
-  }
-
-  Container newLogo7() {
-    return Container(
-      margin: EdgeInsets.only(top: 50),
-      width: screen * 0.2,
-      child: MyStyle().showLogo7(),
     );
   }
 }

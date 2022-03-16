@@ -1,5 +1,10 @@
+
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:application_project/utility/my_style.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+
 
 class Menu extends StatefulWidget {
   const Menu({Key? key}) : super(key: key);
@@ -11,13 +16,27 @@ class Menu extends StatefulWidget {
 class _MenuState extends State<Menu> {
   late double screen;
 
+  String? femail;
+  final firebaseuser = FirebaseAuth.instance.currentUser;
+
+  Future<Null> emailFirebase() async {
+    await Firebase.initializeApp().then((value) async {
+      FirebaseAuth.instance.authStateChanges().listen((event) {
+        setState(() {
+          femail = event?.email;
+        });
+      });
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     screen = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyStyle().color2,
-        title: Text('ติดต่อเรา'),
+        title: Text('เมนู'),
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -46,7 +65,7 @@ class _MenuState extends State<Menu> {
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             Container(
               width: screen * 0.2,
-              child: MyStyle().showLogo2(),              
+              child: MyStyle().showLogo2(),
             ),
             Container(
               width: screen * 0.2,
@@ -101,7 +120,7 @@ class _MenuState extends State<Menu> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-         Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             Container(
               width: screen * 0.30,
               child: ElevatedButton(
@@ -118,7 +137,7 @@ class _MenuState extends State<Menu> {
             Container(
               width: screen * 0.30,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () => Navigator.pushNamed(context, '/enroll'),
                 child: Text('สมัครเรียน'),
                 style: ElevatedButton.styleFrom(
                   primary: MyStyle().color2,
@@ -139,7 +158,7 @@ class _MenuState extends State<Menu> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-         Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             Container(
               width: screen * 0.30,
               child: ElevatedButton(
@@ -176,7 +195,7 @@ class _MenuState extends State<Menu> {
     return Container(
       width: screen * 0.60,
       child: ElevatedButton(
-        onPressed: () => Navigator.pushNamed(context, '/studentregistration'),
+        onPressed: () => Navigator.pushNamed(context, '/studentregistration1'),
         child: Text('ขึ้นทะเบียนประวัตินักศึกษา'),
         style: ElevatedButton.styleFrom(
           primary: MyStyle().color2,
@@ -193,7 +212,13 @@ class _MenuState extends State<Menu> {
       margin: EdgeInsets.only(top: 50),
       width: screen * 0.60,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () async {
+          await Firebase.initializeApp().then((value) async {
+            await FirebaseAuth.instance.signOut().then((value) =>
+                Navigator.pushNamedAndRemoveUntil(
+                    context, '/login', (route) => false));
+          });
+        },
         child: Text('ออกจากระบบ'),
         style: ElevatedButton.styleFrom(
           primary: MyStyle().color2,
@@ -204,4 +229,6 @@ class _MenuState extends State<Menu> {
       ),
     );
   }
+
+  
 }

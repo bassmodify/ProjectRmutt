@@ -35,7 +35,7 @@ class _ContactusState extends State<Contactus> {
               MyStyle().titleH1('ที่อยู่ 39 หมู่ 1 ถนนรังสิต-นครนายก(คลองหก)'),
               MyStyle().titleH1('อำเภอธัญบุรี จังหวัดปทุมธานี 12110'),
               MyStyle().titleH1('E-mail : oreg@rmutt.ac.th'),
-              MyStyle().titleH1('Phoe : 02-549-3690'),
+              MyStyle().titleH1('Phone : 02-549-3690'),
               MyStyle().titleH1('(ห้อง Student Service Center)'),
               MyStyle().titleH1('Fax : 02-577-5028'),
               MyStyle().titleH1('คณะวิศวกรรมศาสตร์'),

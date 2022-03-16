@@ -1,4 +1,3 @@
-
 import 'package:application_project/map.dart';
 import 'package:application_project/utility/my_style.dart';
 import 'package:flutter/material.dart';
@@ -10,13 +9,11 @@ class MapProvider {
   final url = Uri.parse(
       "http://doc.oreg.rmutt.ac.th/OREGWebService/StudentProject.asmx");
   final _body = '''<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Body>
-    <MRegis_InterviewStatusByID xmlns="http://tempuri.org/">
-      <idcard>1849901640921</idcard>
-    </MRegis_InterviewStatusByID>
-  </soap:Body>
-</soap:Envelope>''';
+                  <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+                    <soap:Body>
+                       <MRegis_Calendar xmlns="http://tempuri.org/" />
+                     </soap:Body>
+                  </soap:Envelope>''';
 
   MapProvider() {
     this.getCalenders();
@@ -27,7 +24,7 @@ class MapProvider {
       url,
       headers: {
         "Content-Type": "text/xml; charset=utf-8",
-        "SOAPAction": "http://tempuri.org/MRegis_InterviewStatusByID"
+        "SOAPAction": "http://tempuri.org/MRegis_InterviewStatusByAll"
       },
       body: _body,
     );
@@ -47,14 +44,14 @@ class MapProvider {
   }
 }
 
-class Schedule1 extends StatefulWidget {
-  Schedule1({Key? key}) : super(key: key);
+class Text2 extends StatefulWidget {
+  Text2({Key? key}) : super(key: key);
 
   @override
-  State<Schedule1> createState() => _Schedule1State();
+  State<Text2> createState() => _Text2State();
 }
 
-class _Schedule1State extends State<Schedule1> {
+class _Text2State extends State<Text2> {
   final mapProvider = MapProvider();
 
   Future<List<MapStatusByAll>>? mapa;
@@ -85,29 +82,33 @@ class _Schedule1State extends State<Schedule1> {
               );
             } else {
               final data = snapshot.data;
-              return ListView.builder(
-                itemCount: data?.length,
-                itemBuilder: (context, index) {
-                  return Center(
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Text('รหัส ${data?[index].idcard}'),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text('ชื่อ ${data?[index].firstnameth}'),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text('สถานะ ${data?[index].status}'),
-                      ],
+              return (Center(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 20,
                     ),
-                  );
-                },
-              );
+                    Text('รหัสบัตรประชาชน ${data?[1].idcard}'),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Text('ชื่อ ${data?[1].firstnameth}'),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Text('นามสกุล ${data?[1].lastnameth}'),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Text('รหัสสาขา ${data?[1].majorCode}'),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Text('สถานะสมัคร ${data?[1].status}'),
+                    
+                  ],
+                ),
+              ));
             }
           },
         ),
