@@ -1,28 +1,29 @@
-
+import 'package:application_project/firebasegetapi.dart';
 import 'package:application_project/map.dart';
 import 'package:application_project/utility/my_style.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:xml/xml.dart' as xml;
 
 class MapProvider {
-  final url = Uri.parse(
-      "http://doc.oreg.rmutt.ac.th/OREGWebService/StudentProject.asmx");
-  final _body = '''<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Body>
-    <MRegis_InterviewStatusByID xmlns="http://tempuri.org/">
-      <idcard>1849901640921</idcard>
-    </MRegis_InterviewStatusByID>
-  </soap:Body>
-</soap:Envelope>''';
-
   MapProvider() {
     this.getCalenders();
   }
 
   Future<List<MapStatusByAll>> getCalenders() async {
+    final url = Uri.parse(
+        "http://doc.oreg.rmutt.ac.th/OREGWebService/StudentProject.asmx");
+    final _body = '''<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <MRegis_InterviewStatusByID xmlns="http://tempuri.org/">
+      <idcard>string</idcard>
+    </MRegis_InterviewStatusByID>
+  </soap:Body>
+</soap:Envelope>''';
     final resp = await http.post(
       url,
       headers: {
@@ -59,10 +60,17 @@ class _Schedule1State extends State<Schedule1> {
 
   Future<List<MapStatusByAll>>? mapa;
 
+  final firebaseuser = FirebaseAuth.instance.currentUser;
+
+  Aaaa data = Aaaa("text");
+
   @override
   void initState() {
     super.initState();
     mapa = mapProvider.getCalenders();
+    print("--------------");
+    print(Ffff().ghhh().then((value) => data.hb = value));
+    print(data.hb);
   }
 
   @override

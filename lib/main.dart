@@ -11,7 +11,7 @@ Future<Null> main() async {
   await Firebase.initializeApp().then((value) async {
     FirebaseAuth.instance.authStateChanges().listen((event) {
       if (event != null) {
-        initialRoute = '/text';
+        initialRoute = '/menu';
       }
       runApp(MyApp());
     });

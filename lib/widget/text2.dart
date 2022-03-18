@@ -1,3 +1,4 @@
+// import 'package:application_project/firebasegetapi.dart';
 import 'package:application_project/map.dart';
 import 'package:application_project/utility/my_style.dart';
 import 'package:flutter/material.dart';
@@ -60,6 +61,7 @@ class _Text2State extends State<Text2> {
   void initState() {
     super.initState();
     mapa = mapProvider.getCalenders();
+    
   }
 
   @override

@@ -135,7 +135,7 @@ class _Studentregistration1State extends State<Studentregistration1> {
               (newgraduate?.isEmpty ?? true)) {
             normalDialog(context, 'กรุณากรอกให้ครบถ้วน');
           } else {
-            registerFirebase();
+             registerFirebase();
           }
         },
         child: Text('บันทึกข้อมูล'),

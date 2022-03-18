@@ -146,7 +146,7 @@ class _LoginState extends State<Login> {
             normalDialog(context, 'กรุณากรอกข้อมูลให้ถูกต้อง');
           } else {
             checkAuthen();
-            //setFirebase();
+            setFirebase();
           }
         },
         child: Text('เข้าสู่ระบบ'),
