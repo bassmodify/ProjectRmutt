@@ -1,4 +1,3 @@
-
 import 'package:application_project/map.dart';
 import 'package:application_project/utility/my_style.dart';
 import 'package:flutter/material.dart';
@@ -6,21 +5,20 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:xml/xml.dart' as xml;
 
-class MapProvider {
-  final url = Uri.parse(
-      "http://doc.oreg.rmutt.ac.th/OREGWebService/StudentProject.asmx");
-  final _body = '''<?xml version="1.0" encoding="utf-8"?>
+class MapProviderCalaender {
+  MapProviderCalaender() {
+    this.getCalenders();
+  }
+
+  Future<List<MapCalenders>> getCalenders() async {
+    final url = Uri.parse(
+        "http://doc.oreg.rmutt.ac.th/OREGWebService/StudentProject.asmx");
+    final _body = '''<?xml version="1.0" encoding="utf-8"?>
                   <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
                     <soap:Body>
                        <MRegis_Calendar xmlns="http://tempuri.org/" />
                      </soap:Body>
                   </soap:Envelope>''';
-
-  MapProvider() {
-    this.getCalenders();
-  }
-
-  Future<List<MapCalenders>> getCalenders() async {
     final resp = await http.post(
       url,
       headers: {
@@ -32,9 +30,9 @@ class MapProvider {
     if (resp.statusCode == 200) {
       var responseBody = resp.body;
 
-      var parseXml = xml.XmlDocument.parse(responseBody).innerText;
+      var parseXmlCalender = xml.XmlDocument.parse(responseBody).innerText;
 
-      final decodeJson = jsonDecode(parseXml) as List;
+      final decodeJson = jsonDecode(parseXmlCalender) as List;
       List<MapCalenders> data =
           decodeJson.map((e) => MapCalenders.fromJson(e)).toList();
       print(data);
@@ -53,18 +51,20 @@ class Schedule extends StatefulWidget {
 }
 
 class _ScheduleState extends State<Schedule> {
-  final mapProvider = MapProvider();
+  final mapProvider = MapProviderCalaender();
+  late double screen;
 
-  Future<List<MapCalenders>>? mapa;
+  Future<List<MapCalenders>>? mapDataCalender;
 
   @override
   void initState() {
     super.initState();
-    mapa = mapProvider.getCalenders();
+    mapDataCalender = mapProvider.getCalenders();
   }
 
   @override
   Widget build(BuildContext context) {
+    screen = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyStyle().color2,
@@ -72,7 +72,7 @@ class _ScheduleState extends State<Schedule> {
       ),
       body: Container(
         child: FutureBuilder(
-          future: mapa,
+          future: mapDataCalender,
           builder: (BuildContext context,
               AsyncSnapshot<List<MapCalenders>> snapshot) {
             if (!snapshot.hasData) {
@@ -86,23 +86,49 @@ class _ScheduleState extends State<Schedule> {
               return ListView.builder(
                 itemCount: data?.length,
                 itemBuilder: (context, index) {
-                  return Center(
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Text('${data?[index].topic}'),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text('วันเริ่มต้น ${data?[index].startdate}'),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text('วันสิ้นสุด ${data?[index].stopdate}'),
-                      ],
-                    ),
+                  return Column(
+                    children: [
+                      SizedBox(
+                        height: 17,
+                      ),
+                      Row(
+                        children: [
+                          Column(
+                            children: [
+                              Padding(padding: EdgeInsets.only(left: 60)),
+                              Icon(
+                                Icons.calendar_month,
+                                size: screen*0.1,
+                              )
+                            ],
+                          ),
+                          Padding(padding: EdgeInsets.only(left: 10)),
+                          Text(
+                            '${data?[index].id} ${data?[index].topic}',
+                            style: TextStyle(fontSize: screen*0.04),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        children: [
+                          Padding(padding: EdgeInsets.only(left: 70)),
+                          Text(
+                            'วันที่ ${data?[index].startdate} - ${data?[index].stopdate}',
+                            style: TextStyle(fontSize: screen*0.04),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Divider(
+                        height: 25,
+                        thickness: 5,
+                      ),
+                    ],
                   );
                 },
               );

@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
 
@@ -13,8 +12,6 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   late double screen;
- 
-
 
   final firebaseuser = FirebaseAuth.instance.currentUser;
 
@@ -28,23 +25,88 @@ class _ProfileState extends State<Profile> {
       ),
       body: Center(
         child: SingleChildScrollView(
+          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              newLogoProfile(),
               prefix(),
+              Divider(
+                thickness: 3,
+                endIndent: 0,
+                color: Colors.grey,
+              ),
               nameTH(),
+              Divider(
+                thickness: 3,
+                endIndent: 0,
+                color: Colors.grey,
+              ),
               lastnameTh(),
+              Divider(
+                thickness: 3,
+                endIndent: 0,
+                color: Colors.grey,
+              ),
               nameEng(),
+              Divider(
+                thickness: 3,
+                endIndent: 0,
+                color: Colors.grey,
+              ),
               lastnameEng(),
+              Divider(
+                thickness: 3,
+                endIndent: 0,
+                color: Colors.grey,
+              ),
               idNumber(),
+              Divider(
+                thickness: 3,
+                endIndent: 0,
+                color: Colors.grey,
+              ),
               date(),
+              Divider(
+                thickness: 3,
+                endIndent: 0,
+                color: Colors.grey,
+              ),
               ethnicityandnationality(),
+              Divider(
+                thickness: 3,
+                endIndent: 0,
+                color: Colors.grey,
+              ),
               religion(),
+              Divider(
+                thickness: 3,
+                endIndent: 0,
+                color: Colors.grey,
+              ),
               telephone(),
+              Divider(
+                thickness: 3,
+                endIndent: 0,
+                color: Colors.grey,
+              ),
               educationalqualification(),
+              Divider(
+                thickness: 3,
+                endIndent: 0,
+                color: Colors.grey,
+              ),
               studyplandepartment(),
+              Divider(
+                thickness: 3,
+                endIndent: 0,
+                color: Colors.grey,
+              ),
               gPAX(),
+              Divider(
+                thickness: 3,
+                endIndent: 0,
+                color: Colors.grey,
+              ),
               newButton(),
               newButton1(),
             ],
@@ -63,7 +125,7 @@ class _ProfileState extends State<Profile> {
 
   Container newButton() {
     return Container(
-      margin: EdgeInsets.only(top: 40),
+      margin: EdgeInsets.only(top: 10),
       width: screen * 0.40,
       child: ElevatedButton(
         onPressed: () => Navigator.pushNamed(context, '/editprofile'),
@@ -82,7 +144,9 @@ class _ProfileState extends State<Profile> {
     return Container(
       width: screen * 0.40,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, '/checkresult');
+        },
         child: Text('สถานะการสมัคร'),
         style: ElevatedButton.styleFrom(
           primary: MyStyle().color2,
@@ -109,11 +173,12 @@ class _ProfileState extends State<Profile> {
             Map<String, dynamic> data =
                 snapshot.data!.data() as Map<String, dynamic>;
             return Container(
-              child: MyStyle().titleH2(
-                  "คำนำหน้า: ${data['02prefix']}"),
+              child: MyStyle().titleH2("คำนำหน้า: ${data['02prefix']}"),
             );
           }
-          return Text("loading");
+          return Container(
+            child: MyStyle().titleH2("คำนำหน้า:"),
+          );
         },
       ),
     );
@@ -134,11 +199,12 @@ class _ProfileState extends State<Profile> {
             Map<String, dynamic> data =
                 snapshot.data!.data() as Map<String, dynamic>;
             return Container(
-              child: MyStyle().titleH2(
-                  "ชื่อ(ภาษาไทย): ${data['03nameTH']}"),
+              child: MyStyle().titleH2("ชื่อ(ภาษาไทย): ${data['03nameTH']}"),
             );
           }
-          return Text("loading");
+          return Container(
+            child: MyStyle().titleH2("ชื่อ(ภาษาไทย):"),
+          );
         },
       ),
     );
@@ -159,11 +225,13 @@ class _ProfileState extends State<Profile> {
             Map<String, dynamic> data =
                 snapshot.data!.data() as Map<String, dynamic>;
             return Container(
-              child: MyStyle().titleH2(
-                  "นามสกุล(ภาษาไทย): ${data['04lastnameTh']}"),
+              child: MyStyle()
+                  .titleH2("นามสกุล(ภาษาไทย): ${data['04lastnameTh']}"),
             );
           }
-          return Text("loading");
+          return Container(
+            child: MyStyle().titleH2("นามสกุล(ภาษาไทย):"),
+          );
         },
       ),
     );
@@ -184,11 +252,12 @@ class _ProfileState extends State<Profile> {
             Map<String, dynamic> data =
                 snapshot.data!.data() as Map<String, dynamic>;
             return Container(
-              child: MyStyle().titleH2(
-                  "First name: ${data['05nameEng']}"),
+              child: MyStyle().titleH2("First name: ${data['05nameEng']}"),
             );
           }
-          return Text("loading");
+          return Container(
+            child: MyStyle().titleH2("First name:"),
+          );
         },
       ),
     );
@@ -209,17 +278,44 @@ class _ProfileState extends State<Profile> {
             Map<String, dynamic> data =
                 snapshot.data!.data() as Map<String, dynamic>;
             return Container(
-              child: MyStyle().titleH2(
-                  "Last name: ${data['06lastnameEng']}"),
+              child: MyStyle().titleH2("Last name: ${data['06lastnameEng']}"),
             );
           }
-          return Text("loading");
+          return Container(
+            child: MyStyle().titleH2("Last name:"),
+          );
         },
       ),
     );
   }
 
-  Container  idNumber() {
+  Container idNumber() {
+    return Container(
+        margin: EdgeInsets.only(top: 10),
+        width: screen * 0.75,
+        child: FutureBuilder<DocumentSnapshot>(
+          future: FirebaseFirestore.instance
+              .collection('user')
+              .doc(firebaseuser!.uid)
+              .get(),
+          builder:
+              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              Map<String, dynamic> data =
+                  snapshot.data!.data() as Map<String, dynamic>;
+              return Container(
+                child: MyStyle()
+                    .titleH2("รหัสบัตรประจำตัวประชาชน: ${data['07idNumber']}"),
+              );
+            }
+            return Container(
+              child: MyStyle().titleH2("รหัสบัตรประจำตัวประชาชน:"),
+            );
+          },
+        ));
+  }
+
+  Container date() {
     return Container(
       margin: EdgeInsets.only(top: 10),
       width: screen * 0.75,
@@ -234,42 +330,18 @@ class _ProfileState extends State<Profile> {
             Map<String, dynamic> data =
                 snapshot.data!.data() as Map<String, dynamic>;
             return Container(
-              child: MyStyle().titleH2(
-                  "รหัสบัตรประจำตัวประชาชน: ${data['07idNumber']}"),
+              child: MyStyle().titleH2("วันเกิด: ${data['08newDate']}"),
             );
           }
-          return Text("loading");
+          return Container(
+            child: MyStyle().titleH2("วันเกิด:"),
+          );
         },
       ),
     );
   }
 
-  Container  date() {
-    return Container(
-      margin: EdgeInsets.only(top: 10),
-      width: screen * 0.75,
-      child: FutureBuilder<DocumentSnapshot>(
-        future: FirebaseFirestore.instance
-            .collection('user')
-            .doc(firebaseuser!.uid)
-            .get(),
-        builder:
-            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            Map<String, dynamic> data =
-                snapshot.data!.data() as Map<String, dynamic>;
-            return Container(
-              child: MyStyle().titleH2(
-                  "วันเกิด: ${data['08newDate']}"),
-            );
-          }
-          return Text("loading");
-        },
-      ),
-    );
-  }
-
-  Container  ethnicityandnationality() {
+  Container ethnicityandnationality() {
     return Container(
       margin: EdgeInsets.only(top: 10),
       width: screen * 0.75,
@@ -288,13 +360,15 @@ class _ProfileState extends State<Profile> {
                   "เชื้อชาติ: ${data['09ethnicity']} สัญชาติ: ${data['10nationality']}"),
             );
           }
-          return Text("loading");
+          return Container(
+            child: MyStyle().titleH2("เชื้อชาติ: สัญชาติ:"),
+          );
         },
       ),
     );
   }
 
-  Container  religion() {
+  Container religion() {
     return Container(
       margin: EdgeInsets.only(top: 10),
       width: screen * 0.75,
@@ -309,17 +383,18 @@ class _ProfileState extends State<Profile> {
             Map<String, dynamic> data =
                 snapshot.data!.data() as Map<String, dynamic>;
             return Container(
-              child: MyStyle().titleH2(
-                  "ศาสนา: ${data['11religion']}"),
+              child: MyStyle().titleH2("ศาสนา: ${data['11religion']}"),
             );
           }
-          return Text("loading");
+          return Container(
+            child: MyStyle().titleH2("ศาสนา:"),
+          );
         },
       ),
     );
   }
 
-  Container  telephone() {
+  Container telephone() {
     return Container(
       margin: EdgeInsets.only(top: 10),
       width: screen * 0.75,
@@ -334,17 +409,19 @@ class _ProfileState extends State<Profile> {
             Map<String, dynamic> data =
                 snapshot.data!.data() as Map<String, dynamic>;
             return Container(
-              child: MyStyle().titleH2(
-                  "เบอร์โทรศัพท์มมือถือ: ${data['12telephone']}"),
+              child: MyStyle()
+                  .titleH2("เบอร์โทรศัพท์มมือถือ: ${data['12telephone']}"),
             );
           }
-          return Text("loading");
+          return Container(
+            child: MyStyle().titleH2("เบอร์โทรศัพท์มือถือ:"),
+          );
         },
       ),
     );
   }
 
-  Container  educationalqualification() {
+  Container educationalqualification() {
     return Container(
       margin: EdgeInsets.only(top: 10),
       width: screen * 0.75,
@@ -363,13 +440,15 @@ class _ProfileState extends State<Profile> {
                   "วุฒิการศึกษาที่จบ: ${data['13educationalqualification']}"),
             );
           }
-          return Text("loading");
+          return Container(
+            child: MyStyle().titleH2("วุฒิการศึกษาที่จบ:"),
+          );
         },
       ),
     );
   }
 
-  Container  studyplandepartment() {
+  Container studyplandepartment() {
     return Container(
       margin: EdgeInsets.only(top: 10),
       width: screen * 0.75,
@@ -388,13 +467,15 @@ class _ProfileState extends State<Profile> {
                   "แผนการเรียน/แผนก: ${data['14studyplandepartment']}"),
             );
           }
-          return Text("loading");
+          return Container(
+            child: MyStyle().titleH2("แผนการเรียน/แผนก:"),
+          );
         },
       ),
     );
   }
 
-   Container gPAX() {
+  Container gPAX() {
     return Container(
       margin: EdgeInsets.only(top: 10),
       width: screen * 0.75,
@@ -409,16 +490,15 @@ class _ProfileState extends State<Profile> {
             Map<String, dynamic> data =
                 snapshot.data!.data() as Map<String, dynamic>;
             return Container(
-              child: MyStyle().titleH2(
-                  "เกรดเฉลี่ยนสะสม(GPAX): ${data['15gPAX']}"),
+              child:
+                  MyStyle().titleH2("เกรดเฉลี่ยนสะสม(GPAX): ${data['15gPAX']}"),
             );
           }
-          return Text("loading");
+          return Container(
+            child: MyStyle().titleH2("เกรดเฉลี่ยนสะสม(GPAX):"),
+          );
         },
       ),
     );
   }
-
 }
-
-

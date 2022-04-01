@@ -1,125 +1,234 @@
-import 'package:application_project/firebasegetapi.dart';
-import 'package:application_project/map.dart';
+
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:application_project/utility/my_style.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:xml/xml.dart' as xml;
 
-class MapProvider {
-  MapProvider() {
-    this.getCalenders();
-  }
 
-  Future<List<MapStatusByAll>> getCalenders() async {
-    final url = Uri.parse(
-        "http://doc.oreg.rmutt.ac.th/OREGWebService/StudentProject.asmx");
-    final _body = '''<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Body>
-    <MRegis_InterviewStatusByID xmlns="http://tempuri.org/">
-      <idcard>string</idcard>
-    </MRegis_InterviewStatusByID>
-  </soap:Body>
-</soap:Envelope>''';
-    final resp = await http.post(
-      url,
-      headers: {
-        "Content-Type": "text/xml; charset=utf-8",
-        "SOAPAction": "http://tempuri.org/MRegis_InterviewStatusByID"
-      },
-      body: _body,
-    );
-    if (resp.statusCode == 200) {
-      var responseBody = resp.body;
-
-      var parseXml = xml.XmlDocument.parse(responseBody).innerText;
-
-      final decodeJson = jsonDecode(parseXml) as List;
-      List<MapStatusByAll> data =
-          decodeJson.map((e) => MapStatusByAll.fromJson(e)).toList();
-      print(data);
-      return data;
-    } else {
-      throw ("Something Error!");
-    }
-  }
-}
-
-class Schedule1 extends StatefulWidget {
-  Schedule1({Key? key}) : super(key: key);
+class Text1 extends StatefulWidget {
+  const Text1({Key? key}) : super(key: key);
 
   @override
-  State<Schedule1> createState() => _Schedule1State();
+  _Text1State createState() => _Text1State();
 }
 
-class _Schedule1State extends State<Schedule1> {
-  final mapProvider = MapProvider();
+class _Text1State extends State<Text1> {
+  late double screen;
 
-  Future<List<MapStatusByAll>>? mapa;
-
+  String? femail;
   final firebaseuser = FirebaseAuth.instance.currentUser;
 
-  Aaaa data = Aaaa("text");
-
-  @override
-  void initState() {
-    super.initState();
-    mapa = mapProvider.getCalenders();
-    print("--------------");
-    print(Ffff().ghhh().then((value) => data.hb = value));
-    print(data.hb);
+  Future<Null> emailFirebase() async {
+    await Firebase.initializeApp().then((value) async {
+      FirebaseAuth.instance.authStateChanges().listen((event) {
+        setState(() {
+          femail = event?.email;
+        });
+      });
+    });
   }
+
 
   @override
   Widget build(BuildContext context) {
+    screen = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyStyle().color2,
-        title: Text('กำหนดการ'),
+        title: Text('เมนู'),
       ),
-      body: Container(
-        child: FutureBuilder(
-          future: mapa,
-          builder: (BuildContext context,
-              AsyncSnapshot<List<MapStatusByAll>> snapshot) {
-            if (!snapshot.hasData) {
-              return Center(
-                child: Container(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            } else {
-              final data = snapshot.data;
-              return ListView.builder(
-                itemCount: data?.length,
-                itemBuilder: (context, index) {
-                  return Center(
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Text('รหัส ${data?[index].idcard}'),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text('ชื่อ ${data?[index].firstnameth}'),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text('สถานะ ${data?[index].status}'),
-                      ],
-                    ),
-                  );
-                },
-              );
-            }
-          },
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              newLogomenu0(),
+              newButton(),
+              newLogomenu1(),
+              newButton1(),
+              newLogomenu2(),
+              newButton2(),
+              newButton3(),
+            ],
+          ),
         ),
       ),
     );
   }
+
+  Container newLogomenu0() {
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            Container(
+              width: screen * 0.2,
+              child: MyStyle().showLogo2(),
+            ),
+            Container(
+              width: screen * 0.2,
+              child: MyStyle().showLogo3(),
+            ),
+          ]),
+        ],
+      ),
+    );
+  }
+
+  Container newLogomenu1() {
+    return Container(
+      margin: EdgeInsets.only(top: 40),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            Container(
+              width: screen * 0.2,
+              child: MyStyle().showLogo4(),
+            ),
+            Container(
+              width: screen * 0.2,
+              child: MyStyle().showLogo5(),
+            ),
+          ]),
+        ],
+      ),
+    );
+  }
+
+  Container newLogomenu2() {
+    return Container(
+      margin: EdgeInsets.only(top: 40),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            Container(
+              width: screen * 0.2,
+              child: MyStyle().showLogo6(),
+            ),
+          ]),
+        ],
+      ),
+    );
+  }
+
+  Container newButton() {
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            Container(
+              width: screen * 0.30,
+              child: ElevatedButton(
+                onPressed: () => Navigator.pushNamed(context, '/schedule'),
+                child: Text('กำหนดการ'),
+                style: ElevatedButton.styleFrom(
+                  primary: MyStyle().color2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              width: screen * 0.30,
+              child: ElevatedButton(
+                onPressed: () => Navigator.pushNamed(context, '/enroll'),
+                child: Text('สมัครเรียน'),
+                style: ElevatedButton.styleFrom(
+                  primary: MyStyle().color2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+              ),
+            ),
+          ]),
+        ],
+      ),
+    );
+  }
+
+  Container newButton1() {
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            Container(
+              width: screen * 0.30,
+              child: ElevatedButton(
+                onPressed: () => Navigator.pushNamed(context, '/contactus'),
+                child: Text('ติดต่อเรา'),
+                style: ElevatedButton.styleFrom(
+                  primary: MyStyle().color2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              width: screen * 0.30,
+              child: ElevatedButton(
+                onPressed: () => Navigator.pushNamed(context, '/profile'),
+                child: Text('ข้อมมูลผู้ใช้'),
+                style: ElevatedButton.styleFrom(
+                  primary: MyStyle().color2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+              ),
+            ),
+          ]),
+        ],
+      ),
+    );
+  }
+
+  Container newButton2() {
+    return Container(
+      width: screen * 0.60,
+      child: ElevatedButton(
+        onPressed: () => Navigator.pushNamed(context, '/studentregistration'),
+        child: Text('ขึ้นทะเบียนประวัตินักศึกษา'),
+        style: ElevatedButton.styleFrom(
+          primary: MyStyle().color2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Container newButton3() {
+    return Container(
+      margin: EdgeInsets.only(top: 50),
+      width: screen * 0.60,
+      child: ElevatedButton(
+        onPressed: () async {
+          await Firebase.initializeApp().then((value) async {
+            await FirebaseAuth.instance.signOut().then((value) =>
+                Navigator.pushNamedAndRemoveUntil(
+                    context, '/login', (route) => false));
+          });
+        },
+        child: Text('ออกจากระบบ'),
+        style: ElevatedButton.styleFrom(
+          primary: MyStyle().color2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      ),
+    );
+  }
+
+  
 }

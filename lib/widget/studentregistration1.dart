@@ -33,9 +33,10 @@ class _Studentregistration1State extends State<Studentregistration1> {
       newnumberofsiblings,
       newtalent,
       newgraduate,
+      newaddress,
       femail;
   String newfatherincome = 'รายได้บิดา/ปี';
-  String newmotherincome = 'รายได้มมารดา/ปี';
+  String newmotherincome = 'รายได้มารดา/ปี';
 
   final firebaseuser = FirebaseAuth.instance.currentUser;
 
@@ -74,19 +75,19 @@ class _Studentregistration1State extends State<Studentregistration1> {
               mothername(),
               parentname(),
               SizedBox(
-                height: screen * 0.07,
+                height: screen * 0.01,
               ),
-              MyStyle().titleH2('บุคคลที่สามมารถติดต่อได้'),
+              MyStyle().titleH2('บุคคลที่สามารถติดต่อได้'),
               contactname(),
-              //ที่อยู่คนที่ติดต่อได้
+              address(),
               contacttheworkplace(),
               contactnumber(), //ผู้ปกครอง
               studentwork(),
               disabilityinformation(),
               SizedBox(
-                height: screen * 0.07,
+                height: screen * 0.01,
               ),
-              MyStyle().titleH2('ข้อมมูลส่วนตัวบิดา-มารดา'),
+              MyStyle().titleH2('ข้อมูลส่วนตัวบิดา-มารดา'),
               parentssituation(),
               //บิดา
               fatherincome(),
@@ -122,7 +123,7 @@ class _Studentregistration1State extends State<Studentregistration1> {
               (newcontactname?.isEmpty ?? true) ||
               (newcontacttheworkplace?.isEmpty ?? true) ||
               (newcontactnumber?.isEmpty ?? true) ||
-              (newstudentwork?.isEmpty ?? true) ||
+              // (newstudentwork?.isEmpty ?? true) ||
               (newdisabilityinformation?.isEmpty ?? true) ||
               (newparentssituation?.isEmpty ?? true) ||
               (newfatherstatus?.isEmpty ?? true) ||
@@ -132,7 +133,8 @@ class _Studentregistration1State extends State<Studentregistration1> {
               (newparentoccupationalinformation?.isEmpty ?? true) ||
               (newnumberofsiblings?.isEmpty ?? true) ||
               (newtalent?.isEmpty ?? true) ||
-              (newgraduate?.isEmpty ?? true)) {
+              (newgraduate?.isEmpty ?? true)||
+              (newaddress?.isEmpty ?? true)) {
             normalDialog(context, 'กรุณากรอกให้ครบถ้วน');
           } else {
              registerFirebase();
@@ -185,7 +187,7 @@ class _Studentregistration1State extends State<Studentregistration1> {
         onChanged: (value) => newmothername = value.trim(),
         decoration: InputDecoration(
           hintStyle: TextStyle(color: MyStyle().color2),
-          hintText: 'ชื่อ-นามสกุล มมารดา',
+          hintText: 'ชื่อ-นามสกุล มารดา',
           prefixIcon: Icon(
             Icons.drive_file_rename_outline,
             color: MyStyle().color2,
@@ -242,6 +244,32 @@ class _Studentregistration1State extends State<Studentregistration1> {
           hintText: 'ชื่อ-นามสกุล',
           prefixIcon: Icon(
             Icons.drive_file_rename_outline,
+            color: MyStyle().color2,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: BorderSide(color: MyStyle().color2),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: BorderSide(color: MyStyle().color2),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Container address() {
+    return Container(
+      margin: EdgeInsets.only(top: 10),
+      width: screen * 0.75,
+      child: TextField(
+        onChanged: (value) => newaddress = value.trim(),
+        decoration: InputDecoration(
+          hintStyle: TextStyle(color: MyStyle().color2),
+          hintText: 'ที่อยู่คนที่ติดต่อได้',
+          prefixIcon: Icon(
+            Icons.credit_card,
             color: MyStyle().color2,
           ),
           enabledBorder: OutlineInputBorder(
@@ -498,7 +526,7 @@ class _Studentregistration1State extends State<Studentregistration1> {
             newmotherincome = newValue!;
           });
         },
-        items: <String>['รายได้มมารดา/ปี', '100,000-150,000', '150,001-300,000', '300,001+']
+        items: <String>['รายได้มารดา/ปี', '100,000-150,000', '150,001-300,000', '300,001+']
             .map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
@@ -518,7 +546,7 @@ class _Studentregistration1State extends State<Studentregistration1> {
         onChanged: (value) => newmotherstatus = value.trim(),
         decoration: InputDecoration(
           hintStyle: TextStyle(color: MyStyle().color2),
-          hintText: 'สภานภาพมมารดา',
+          hintText: 'สภานภาพมารดา',
           prefixIcon: Icon(
             Icons.credit_card,
             color: MyStyle().color2,
@@ -617,7 +645,7 @@ class _Studentregistration1State extends State<Studentregistration1> {
     );
   }
 
-//ความมสามารถพิเศษ
+//ความสามารถพิเศษ
   Container talent() {
     return Container(
       margin: EdgeInsets.only(top: 10),
@@ -626,7 +654,7 @@ class _Studentregistration1State extends State<Studentregistration1> {
         onChanged: (value) => newtalent = value.trim(),
         decoration: InputDecoration(
           hintStyle: TextStyle(color: MyStyle().color2),
-          hintText: 'ความถนัด/ความมสามารถพิเศษ',
+          hintText: 'ความถนัด/ความสามารถพิเศษ',
           prefixIcon: Icon(
             Icons.credit_card,
             color: MyStyle().color2,
@@ -681,29 +709,30 @@ class _Studentregistration1State extends State<Studentregistration1> {
           .set({
         "01email": femail,
         "02fathername": newfathername,
-        "02mothername": newmothername,
-        "02parentname": newparentname,
-        "02contactname": newcontactname,
-        "02contacttheworkplace": newcontacttheworkplace,
-        "02contactnumber": newcontactnumber,
-        "02studentwork": newstudentwork,
-        "02disabilityinformation": newdisabilityinformation,
-        "02parentssituation": newparentssituation,
-        "02fatherstatus": newfatherstatus,
-        "02fatheroccupation": newfatheroccupation,
-        "02motherstatus": newmotherstatus,
-        "02motheroccupation": newmotheroccupation,
-        "02parentoccupationalinformation": newparentoccupationalinformation,
-        "02numberofsiblings": newnumberofsiblings,
-        "02talent": newtalent,
-        "02graduate": newgraduate,
+        "03mothername": newmothername,
+        "04parentname": newparentname,
+        "05contactname": newcontactname,
+        "06contacttheworkplace": newcontacttheworkplace,
+        "07contactnumber": newcontactnumber,
+        "08studentwork": newstudentwork,
+        "09disabilityinformation": newdisabilityinformation,
+        "10parentssituation": newparentssituation,
+        "11fatherstatus": newfatherstatus,
+        "12fatheroccupation": newfatheroccupation,
+        "13motherstatus": newmotherstatus,
+        "14motheroccupation": newmotheroccupation,
+        "15parentoccupationalinformation": newparentoccupationalinformation,
+        "16numberofsiblings": newnumberofsiblings,
+        "17talent": newtalent,
+        "18graduate": newgraduate,
+        "19address": newaddress,
       }).then((_) {
         print("success!");
         normalDialog(context, 'บันทึกข้อมูลเรียบร้อยแล้ว');
         Future.delayed(
           Duration(seconds: 2),
           () {
-            Navigator.pushNamed(context, '/menu');
+            Navigator.pushNamed(context, '/checkRegis');
           },
         );
       });

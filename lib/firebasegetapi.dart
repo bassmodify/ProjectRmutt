@@ -17,15 +17,3 @@ class Ffff {
   }
 }
 
-class Aaaa {
-  String Bbbb;
-
-  Aaaa(this.Bbbb);
-  String get hb {
-    return Bbbb;
-  }
-  void set hb(String jb) {
-    this.Bbbb = jb ;
-  }
-
-}

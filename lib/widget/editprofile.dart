@@ -1,10 +1,11 @@
+// import 'package:application_project/cart_model.dart';
+// import 'package:application_project/sqflite.dart';
 import 'package:application_project/utility/dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:application_project/utility/my_style.dart';
-
 
 class EditProfile extends StatefulWidget {
   const EditProfile({Key? key}) : super(key: key);
@@ -21,6 +22,7 @@ class _EditProfileState extends State<EditProfile> {
       newnameEng,
       newlastnameEng,
       newidNumber,
+      newaddress,
       newethnicity,
       newnationality,
       newreligion,
@@ -30,7 +32,9 @@ class _EditProfileState extends State<EditProfile> {
       femail;
   String newprefix = 'คำนำหน้า';
   String neweducationalqualification = 'วุฒิการศึกษาที่จบ';
-
+  String newday = 'วัน';
+  String newmonth = 'เดือน';
+  String newyear = 'ปี';
   final firebaseuser = FirebaseAuth.instance.currentUser;
 
   @override
@@ -71,7 +75,12 @@ class _EditProfileState extends State<EditProfile> {
               nameEng(),
               lastnameEng(),
               idNumber(),
-              NewDate(),
+              address(),
+              SizedBox(
+                height: screen * 0.01,
+              ),
+              MyStyle().titleH2('วัน/เดือน/ปีเกิด'),
+              datmonthyear(),
               ethnicity(),
               nationality(),
               religion(),
@@ -80,7 +89,6 @@ class _EditProfileState extends State<EditProfile> {
               studyplandepartment(),
               gPAX(),
               newButton(),
-
             ],
           ),
         ),
@@ -101,7 +109,22 @@ class _EditProfileState extends State<EditProfile> {
       width: screen * 0.40,
       child: ElevatedButton(
         onPressed: () {
-          registerFirebase();
+          if ((newnameTh?.isEmpty ?? true) ||
+              (newlastnameTh?.isEmpty ?? true) ||
+              (newnameEng?.isEmpty ?? true) ||
+              (newlastnameEng?.isEmpty ?? true) ||
+              (newidNumber?.isEmpty ?? true) ||
+              (newaddress?.isEmpty ?? true) ||
+              (newethnicity?.isEmpty ?? true) ||
+              (newnationality?.isEmpty ?? true) ||
+              (newreligion?.isEmpty ?? true) ||
+              (newtelephone?.isEmpty ?? true) ||
+              (newstudyplandepartment?.isEmpty ?? true) ||
+              (newgPAX?.isEmpty ?? true)) {
+            normalDialog(context, 'กรุณากรอกให้ครบถ้วน');
+          } else {
+            registerFirebase();
+          }
         },
         child: Text('บันทึกข้อมูล'),
         style: ElevatedButton.styleFrom(
@@ -227,6 +250,32 @@ class _EditProfileState extends State<EditProfile> {
         decoration: InputDecoration(
           hintStyle: TextStyle(color: MyStyle().color2),
           hintText: 'หมายเลขบัตรประชาชน',
+          prefixIcon: Icon(
+            Icons.credit_card,
+            color: MyStyle().color2,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: BorderSide(color: MyStyle().color2),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: BorderSide(color: MyStyle().color2),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Container address() {
+    return Container(
+      margin: EdgeInsets.only(top: 10),
+      width: screen * 0.75,
+      child: TextField(
+        onChanged: (value) => newaddress = value.trim(),
+        decoration: InputDecoration(
+          hintStyle: TextStyle(color: MyStyle().color2),
+          hintText: 'ที่อยู่ตามทะเบียนบ้าน',
           prefixIcon: Icon(
             Icons.credit_card,
             color: MyStyle().color2,
@@ -466,6 +515,159 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
+  Container datmonthyear() {
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            Container(
+              margin: EdgeInsets.only(top: 10),
+              width: screen * 0.2,
+              decoration: BoxDecoration(
+                border: Border.all(color: MyStyle().color2),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: DropdownButton<String>(
+                isExpanded: true,
+                value: newday,
+                icon: const Icon(Icons.arrow_downward),
+                iconSize: 24,
+                elevation: 16,
+                style: TextStyle(color: MyStyle().color2, fontSize: 18.0),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    newday = newValue!;
+                  });
+                },
+                items: <String>[
+                  'วัน',
+                  '1',
+                  '2',
+                  '3',
+                  '4',
+                  '5',
+                  '6',
+                  '7',
+                  '8',
+                  '9',
+                  '10',
+                  '11',
+                  '12',
+                  '13',
+                  '14',
+                  '15',
+                  '16',
+                  '17',
+                  '18',
+                  '19',
+                  '20',
+                  '21',
+                  '22',
+                  '23',
+                  '24',
+                  '25',
+                  '26',
+                  '27',
+                  '28',
+                  '29',
+                  '30',
+                  '31',
+                ].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Center(child: Container(child: Text(value))),
+                  );
+                }).toList(),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 10),
+              width: screen * 0.40,
+              decoration: BoxDecoration(
+                border: Border.all(color: MyStyle().color2),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: DropdownButton<String>(
+                isExpanded: true,
+                value: newmonth,
+                icon: const Icon(Icons.arrow_downward),
+                iconSize: 24,
+                elevation: 16,
+                style: TextStyle(color: MyStyle().color2, fontSize: 18.0),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    newmonth = newValue!;
+                  });
+                },
+                items: <String>[
+                  'เดือน',
+                  'มกราคม',
+                  'กุมภาพันธ์',
+                  'มีนาคม',
+                  'เมษายน ',
+                  'พฤษภาคม',
+                  'มิถุนายน',
+                  'กรกฎาคม',
+                  'สิงหาคม',
+                  'กันยายน',
+                  'ตุลาคม',
+                  'พฤศจิกายน',
+                  'ธันวาคม',
+                ].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Center(child: Container(child: Text(value))),
+                  );
+                }).toList(),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 10),
+              width: screen * 0.30,
+              decoration: BoxDecoration(
+                border: Border.all(color: MyStyle().color2),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: DropdownButton<String>(
+                isExpanded: true,
+                value: newyear,
+                icon: const Icon(Icons.arrow_downward),
+                iconSize: 24,
+                elevation: 16,
+                style: TextStyle(color: MyStyle().color2, fontSize: 18.0),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    newyear = newValue!;
+                  });
+                },
+                items: <String>[
+                  'ปี',
+                  '2540',
+                  '2541',
+                  '2542',
+                  '2543',
+                  '2544',
+                  '2545',
+                  '2546',
+                  '2547',
+                  '2548',
+                  '2549',
+                  '2550'
+                ].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Center(child: Container(child: Text(value))),
+                  );
+                }).toList(),
+              ),
+            ),
+          ]),
+        ],
+      ),
+    );
+  }
+
   Future<Null> registerFirebase() async {
     await Firebase.initializeApp().then((value) async {
       print('----------Firebase---------');
@@ -480,7 +682,7 @@ class _EditProfileState extends State<EditProfile> {
         "05nameEng": newnameEng,
         "06lastnameEng": newlastnameEng,
         "07idNumber": newidNumber,
-        "08newDate": "--",
+        "08newDate": "$newday /$newmonth /$newyear",
         "09ethnicity": newethnicity,
         "10nationality": newnationality,
         "11religion": newreligion,
@@ -488,6 +690,7 @@ class _EditProfileState extends State<EditProfile> {
         "13educationalqualification": neweducationalqualification,
         "14studyplandepartment": newstudyplandepartment,
         "15gPAX": newgPAX,
+        "16address": newaddress,
       }).then((_) {
         print("success!");
         normalDialog(context, 'บันทึกข้อมูลเรียบร้อยแล้ว');
